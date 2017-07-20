@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="studio.yttrium.dao.DiaryDao">
+    <resultMap id="BaseResultMap" type="studio.yttrium.pojo.Diary">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="create_on" jdbcType="TIMESTAMP" property="createOn"/>
+        <result column="create_by" jdbcType="INTEGER" property="createBy"/>
+        <result column="modify_on" jdbcType="TIMESTAMP" property="modifyOn"/>
+        <result column="weather" jdbcType="VARCHAR" property="weather"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+    </resultMap>
+    <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="studio.yttrium.pojo.Diary">
+        <result column="content" jdbcType="LONGVARCHAR" property="content"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+    id, title, create_on, create_by, modify_on, weather
+  </sql>
+    <sql id="Blob_Column_List">
+    content
+  </sql>
+    <select id="selectByExampleWithBLOBs" parameterType="studio.yttrium.pojo.DiaryExample"
+            resultMap="ResultMapWithBLOBs">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from diary
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByExample" parameterType="studio.yttrium.pojo.DiaryExample" resultMap="BaseResultMap">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from diary
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+
+    <select id="selectByExampleLeftUser" parameterType="studio.yttrium.pojo.DiaryExample" resultMap="BaseResultMap">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        diary.id, title, content, create_on, create_by, modify_on, weather,u.user_name
+        from diary LEFT JOIN user AS u ON create_by = u.id
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from diary
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from diary
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <delete id="deleteByExample" parameterType="studio.yttrium.pojo.DiaryExample">
+        delete from diary
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="studio.yttrium.pojo.Diary">
+    insert into diary (id, title, create_on, 
+      create_by, modify_on, weather, 
+      content)
+    values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{createOn,jdbcType=TIMESTAMP}, 
+      #{createBy,jdbcType=INTEGER}, #{modifyOn,jdbcType=TIMESTAMP}, #{weather,jdbcType=VARCHAR}, 
+      #{content,jdbcType=LONGVARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="studio.yttrium.pojo.Diary">
+        insert into diary
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="title != null">
+                title,
+            </if>
+            <if test="createOn != null">
+                create_on,
+            </if>
+            <if test="createBy != null">
+                create_by,
+            </if>
+            <if test="modifyOn != null">
+                modify_on,
+            </if>
+            <if test="weather != null">
+                weather,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="title != null">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="createOn != null">
+                #{createOn,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createBy != null">
+                #{createBy,jdbcType=INTEGER},
+            </if>
+            <if test="modifyOn != null">
+                #{modifyOn,jdbcType=TIMESTAMP},
+            </if>
+            <if test="weather != null">
+                #{weather,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <insert id="insertSelectiveResultId" useGeneratedKeys="true" keyProperty="id" keyColumn="id"
+            parameterType="studio.yttrium.pojo.Diary">
+
+        <selectKey resultType="int" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID() as id
+        </selectKey>
+
+        insert into diary
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="title != null">
+                title,
+            </if>
+            <if test="createOn != null">
+                create_on,
+            </if>
+            <if test="createBy != null">
+                create_by,
+            </if>
+            <if test="modifyOn != null">
+                modify_on,
+            </if>
+            <if test="weather != null">
+                weather,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="title != null">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="createOn != null">
+                #{createOn,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createBy != null">
+                #{createBy,jdbcType=INTEGER},
+            </if>
+            <if test="modifyOn != null">
+                #{modifyOn,jdbcType=TIMESTAMP},
+            </if>
+            <if test="weather != null">
+                #{weather,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="countByExample" parameterType="studio.yttrium.pojo.DiaryExample" resultType="java.lang.Long">
+        select count(*) from diary
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update diary
+        <set>
+            <if test="record.id != null">
+                id = #{record.id,jdbcType=INTEGER},
+            </if>
+            <if test="record.title != null">
+                title = #{record.title,jdbcType=VARCHAR},
+            </if>
+            <if test="record.createOn != null">
+                create_on = #{record.createOn,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.createBy != null">
+                create_by = #{record.createBy,jdbcType=INTEGER},
+            </if>
+            <if test="record.modifyOn != null">
+                modify_on = #{record.modifyOn,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.weather != null">
+                weather = #{record.weather,jdbcType=VARCHAR},
+            </if>
+            <if test="record.content != null">
+                content = #{record.content,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExampleWithBLOBs" parameterType="map">
+        update diary
+        set id = #{record.id,jdbcType=INTEGER},
+        title = #{record.title,jdbcType=VARCHAR},
+        create_on = #{record.createOn,jdbcType=TIMESTAMP},
+        create_by = #{record.createBy,jdbcType=INTEGER},
+        modify_on = #{record.modifyOn,jdbcType=TIMESTAMP},
+        weather = #{record.weather,jdbcType=VARCHAR},
+        content = #{record.content,jdbcType=LONGVARCHAR}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update diary
+        set id = #{record.id,jdbcType=INTEGER},
+        title = #{record.title,jdbcType=VARCHAR},
+        create_on = #{record.createOn,jdbcType=TIMESTAMP},
+        create_by = #{record.createBy,jdbcType=INTEGER},
+        modify_on = #{record.modifyOn,jdbcType=TIMESTAMP},
+        weather = #{record.weather,jdbcType=VARCHAR}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="studio.yttrium.pojo.Diary">
+        update diary
+        <set>
+            <if test="title != null">
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="createOn != null">
+                create_on = #{createOn,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createBy != null">
+                create_by = #{createBy,jdbcType=INTEGER},
+            </if>
+            <if test="modifyOn != null">
+                modify_on = #{modifyOn,jdbcType=TIMESTAMP},
+            </if>
+            <if test="weather != null">
+                weather = #{weather,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                content = #{content,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKeyWithBLOBs" parameterType="studio.yttrium.pojo.Diary">
+    update diary
+    set title = #{title,jdbcType=VARCHAR},
+      create_on = #{createOn,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=INTEGER},
+      modify_on = #{modifyOn,jdbcType=TIMESTAMP},
+      weather = #{weather,jdbcType=VARCHAR},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <update id="updateByPrimaryKey" parameterType="studio.yttrium.pojo.Diary">
+    update diary
+    set title = #{title,jdbcType=VARCHAR},
+      create_on = #{createOn,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=INTEGER},
+      modify_on = #{modifyOn,jdbcType=TIMESTAMP},
+      weather = #{weather,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+    <update id="updateByDelete" parameterType="java.lang.Integer">
+        update diary
+        set create_by = 0
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+
+    <select id="selectLeftUser" parameterType="studio.yttrium.pojo.Diary" resultMap="BaseResultMap">
+        select
+        d.*,u.user_name
+        from diary AS d
+        LEFT JOIN user AS u ON d.create_by = u.id
+        <where>
+            <if test="id != null">
+                AND u.id = #{id,jdbcType=INTEGER}
+            </if>
+            <if test="title != null and title !='' ">
+                AND d.title LIKE #{title,jdbcType=VARCHAR}
+            </if>
+        </where>
+        order by d.create_on DESC
+    </select>
+</mapper>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="studio.yttrium.dao.CommonDao">
+  <update id="addEntityColumns" parameterType="java.util.Map" >
+    <if test="columns != null and columns.size() != 0">
+      alter table ${entityName}
+      <foreach collection="columns" item="item" index="index" open="" separator="," close="">
+        add ${item}
+      </foreach>
+    </if>
+  </update>
+
+  <update id="deleteEntityColumns" parameterType="java.util.Map" >
+    <if test="columns != null and columns.size() != 0">
+      alter table ${entityName}
+      <foreach collection="columns" item="item" index="index" open="" separator="," close="">
+        drop column ${item}
+      </foreach>
+    </if>
+  </update>
+  
+  
+  <update id="createEntity" parameterType="java.util.Map">
+    CREATE TABLE ${entityName} (
+      `id`  int NOT NULL AUTO_INCREMENT COMMENT '序号' ,
+      `name`  varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '名字' ,
+      PRIMARY KEY (`id`)
+      );
+  </update>
+
+  <update id="deleteEntity" parameterType="java.util.Map">
+    <if test="entityName != null and entityName != '' ">
+      drop table ${entityName}
+    </if>
+  </update>
+
+  <insert id="insertData" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+
+    <selectKey resultType="int" order="AFTER" keyProperty="id">
+      SELECT LAST_INSERT_ID() as id
+    </selectKey>
+
+    <if test="params != null and params.size() != 0 and entityName != null and entityName != '' ">
+      insert into ${entityName}
+        <foreach collection="params.keys" item="key" index="index" open="(" separator="," close=")">
+          ${key}
+        </foreach>
+      values
+        <foreach collection="params.keys" item="key" index="index" open="(" separator="," close=")">
+          #{params[${key}]}
+        </foreach>
+    </if>
+    <if test="params == null or params.size() == 0 or entityName == null or entityName == ''">
+      SELECT  -1
+    </if>
+  </insert>
+
+  <select id="getEntityList" parameterType="java.util.Map" resultType="java.util.HashMap">
+    select * from  ${entityName} limit ${pageIndex},${pageSize}
+    <where>
+      <if test="params != null and params.size() != 0">
+        <foreach collection="params" item="item" index="index" open="" separator="" close="">
+          AND ${item}
+        </foreach>
+      </if>
+    </where>
+  </select>
+
+  <select id="getEntityOne" parameterType="java.util.Map" resultType="java.util.HashMap">
+    select * from  ${entityName} WHERE id = #{id}
+  </select>
+
+  <select id="getEntityCount" parameterType="java.util.Map" resultType="java.lang.Long">
+    SELECT COUNT(*) FROM ${entityName}
+    <where>
+      <if test="params != null and params.size() != 0">
+        <foreach collection="params" item="item" index="index" open="" separator="" close="">
+          AND ${item}
+        </foreach>
+      </if>
+    </where>
+  </select>
+
+</mapper>
