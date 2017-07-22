@@ -21,9 +21,16 @@ public interface UserService {
     User findUserByLoginName(String name);
 
     /**
-     * 查找所有授权的用户
+     * 查找所有的用户 (不包括id)
      * @param id
      * @return
      */
     List<User> getUserList(Integer id);
+
+    /**
+     * 查询已经授权的用户
+     * @param id
+     * @return
+     */
+    List<User> findUserLeftPrivilege(Integer id);
 }

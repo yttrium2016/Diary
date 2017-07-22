@@ -65,6 +65,15 @@
                 </div>
             </#list>
         </#if>
+
+        <#if !diaryList?? || (diaryList?size == 0) >
+        <div class='demos-content-padded'>
+
+            <div class="weui-loadmore weui-loadmore_line">
+                <span class="weui-loadmore__tips">暂无数据</span>
+            </div>
+        </div>
+        </#if>
         </div>
     </div>
 </div>

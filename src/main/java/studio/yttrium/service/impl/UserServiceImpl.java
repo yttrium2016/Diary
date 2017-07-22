@@ -29,8 +29,12 @@ public class UserServiceImpl implements UserService {
         UserExample example = new UserExample();
         UserExample.Criteria criteria = example.createCriteria();
         if (id != null) {
-            criteria.andIdEqualTo(id);
+            criteria.andIdNotEqualTo(id);
         }
         return userDao.selectByExample(example);
+    }
+
+    public List<User> findUserLeftPrivilege(Integer id) {
+        return userDao.selectUserLeftPrivilege(id);
     }
 }

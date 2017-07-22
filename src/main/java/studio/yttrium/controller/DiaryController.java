@@ -163,21 +163,21 @@ public class DiaryController {
 
         if (StringUtils.isNotBlank(type) && loginUser != null) {
             if ("my".equals(type.trim())) {
-                view.addAttribute("type","my");
+                view.addAttribute("type", "my");
                 Diary diary = new Diary();
                 diary.setId(loginUser.getId());
                 List<Diary> diaryList = diaryService.listDiary(diary);
                 if (diaryList != null) {
                     view.addAttribute("diaryList", diaryList);
                 }
-            } else if ("friend".equals(type.trim())){
-                view.addAttribute("type","friend");
+            } else if ("friend".equals(type.trim())) {
+                view.addAttribute("type", "friend");
                 List<Integer> privilegeList = new ArrayList<Integer>();
                 Integer id = loginUser.getId();
                 if (id != null)
-                privilegeList =  privilegeService.findPrivilegeList(id);
+                    privilegeList = privilegeService.findPrivilegeList(id);
 
-                if (privilegeList != null) {
+                if (privilegeList != null && privilegeList.size() > 0) {
                     List<Diary> diaryList = diaryService.listDiaryByUserIds(privilegeList, "");
                     if (diaryList != null) {
                         view.addAttribute("diaryList", diaryList);
@@ -191,7 +191,7 @@ public class DiaryController {
 
     }
 
-    @RequestMapping(value = "getDiaryList",method = RequestMethod.POST)
+    @RequestMapping(value = "getDiaryList", method = RequestMethod.POST)
     @ResponseBody
     public DefaultResult getDiaryList(HttpServletRequest request) {
 
@@ -209,8 +209,8 @@ public class DiaryController {
 
                     Diary diary = new Diary();
                     diary.setId(loginUser.getId());
-                    if (StringUtils.isNotBlank(title)){
-                        diary.setTitle("%"+title.trim()+"%");
+                    if (StringUtils.isNotBlank(title)) {
+                        diary.setTitle("%" + title.trim() + "%");
                     }
                     List<Diary> diaryList = diaryService.listDiary(diary);
                     if (diaryList != null) {

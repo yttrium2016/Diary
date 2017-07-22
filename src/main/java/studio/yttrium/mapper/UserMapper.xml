@@ -201,4 +201,8 @@
       user_name = #{userName,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectUserLeftPrivilege" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    SELECT `user`.* FROM `user` LEFT JOIN privilege ON user.id = privilege.user_id WHERE privilege.refer_id = #{id,jdbcType=INTEGER}
+  </select>
 </mapper>

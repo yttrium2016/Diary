@@ -84,7 +84,7 @@
             我的日记
         </p>
     </a>
-    <a href="form.html" class="weui-grid js_grid">
+    <a href="/user/accredit.shtml" class="weui-grid js_grid">
         <div class="weui-grid__icon">
             <img src="/img/icon_nav_toast.png" alt="">
         </div>

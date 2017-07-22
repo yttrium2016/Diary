@@ -1,9 +1,11 @@
 package studio.yttrium.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import studio.yttrium.annotation.PrivilegeInfo;
 import studio.yttrium.pojo.DefaultResult;
 import studio.yttrium.pojo.User;
 import studio.yttrium.service.UserService;
@@ -86,6 +88,23 @@ public class UserController {
         }
 
         return result;
+    }
+
+    @RequestMapping("accredit")
+    @PrivilegeInfo(name = "login")
+    public String accredit(HttpServletRequest request, Model view) {
+
+        User loginUser = (User) request.getSession().getAttribute("loginUser");
+        List<User> userList = null;
+        List<User> privilegeUserList = null;
+        if (loginUser != null) {
+            userList = userService.getUserList(loginUser.getId());
+            privilegeUserList = userService.findUserLeftPrivilege(loginUser.getId());
+        }
+        if (userList != null) view.addAttribute("userList",userList);
+        if (privilegeUserList != null) view.addAttribute("privilegeUserList",privilegeUserList);
+
+        return "mobile/accredit";
     }
 
 }
