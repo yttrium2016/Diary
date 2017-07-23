@@ -74,7 +74,7 @@ public class UserController {
         User loginUser = (User) request.getSession().getAttribute("loginUser");
         List<User> userList = null;
         try {
-//            if (loginUser != null)
+            if (loginUser != null)
                 userList = userService.getUserList(null);
 
             if (userList != null) {

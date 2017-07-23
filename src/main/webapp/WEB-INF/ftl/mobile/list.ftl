@@ -54,12 +54,15 @@
                         <li class="weui-media-box__info__meta">作者:${diary.userName !""}</li>
                         <li class="weui-media-box__info__meta">时间:${diary.createOn !?string("yyyy-MM-dd HH:mm:ss")}</li>
                         <li class="weui-media-box__info__meta" style="float: right">
-                            <a href="/diary/showDiary.shtml?id=${diary.id !""}"
-                               class="weui-btn weui-btn_mini weui-btn_default">查看</a>&nbsp;
-                            <a href="/diary/addOrEdit.shtml?id=${diary.id !""}"
-                               class="weui-btn weui-btn_mini weui-btn_primary">编辑</a>&nbsp;
-                            <a onclick="_delete(${diary.id !""},'${diary.title !""}')"
-                               class="weui-btn weui-btn_mini weui-btn_warn">删除</a>
+                            <form id="subform${diary.id !''}" action="/diary/showDiary.shtml" method="post">
+                                <input id="id" name="id" value="${diary.id !""}" hidden="hidden"/>
+                                <button name="submit" type="submit" class="weui-btn weui-btn_mini weui-btn_default">查看</button>&nbsp;
+                                <#if type == 'my' >
+                                    <a href="/diary/addOrEdit.shtml?id=${diary.id !""}" ><button type="button" class="weui-btn weui-btn_mini weui-btn_primary">编辑</button></a>&nbsp;
+                                    <button type="button" onclick="_delete(${diary.id !""},'${diary.title !""}')"
+                                       class="weui-btn weui-btn_mini weui-btn_warn">删除</button>
+                                </#if>
+                            </form>
                         </li>
                     </ul>
                 </div>
@@ -67,12 +70,12 @@
         </#if>
 
         <#if !diaryList?? || (diaryList?size == 0) >
-        <div class='demos-content-padded'>
+            <div class='demos-content-padded'>
 
-            <div class="weui-loadmore weui-loadmore_line">
-                <span class="weui-loadmore__tips">暂无数据</span>
+                <div class="weui-loadmore weui-loadmore_line">
+                    <span class="weui-loadmore__tips">暂无数据</span>
+                </div>
             </div>
-        </div>
         </#if>
         </div>
     </div>
@@ -87,27 +90,48 @@
 <script src="/js/jquery-weui.js"></script>
 <script>
 
-    function add(diary) {
+    var type = '${type ! ""}';
+
+    function addmy(diary) {
         $("#diaryData").append("<div class=\"weui-media-box weui-media-box_text\"> " +
                 "<h4 class=\"weui-media-box__title\">" + diary.title + "</h4> " +
                 "<p class=\"weui-media-box__desc\">" + diary.content + "</p> " +
                 "<ul class=\"weui-media-box__info\"> " +
                 "<li class=\"weui-media-box__info__meta\">作者:" + diary.userName + "</li> " +
                 "<li class=\"weui-media-box__info__meta\">时间:" + diary.createOn + "</li>" +
-                "<li class=\"weui-media-box__info__meta\" style=\"float: right\">"+
-                    "<a href=\"/diary/showDiary.shtml?id="+diary.id+"\" class=\"weui-btn weui-btn_mini weui-btn_default\">查看</a>&nbsp;"+
-                    "<a href=\"/diary/addOrEdit.shtml?id="+diary.id+"\" class=\"weui-btn weui-btn_mini weui-btn_primary\">编辑</a>&nbsp;"+
-                    "<a onclick=\"_delete("+diary.id+",'"+diary.title+"')\" class=\"weui-btn weui-btn_mini weui-btn_warn\">删除</a> "+
+                "<li class=\"weui-media-box__info__meta\" style=\"float: right\">" +
+                "<form id=\"subform\" action=\"/diary/showDiary.shtml\" method=\"post\">" +
+                "<input id=\"id\" name=\"id\" value=\"" + diary.id + "\" hidden=\"hidden\" />" +
+                "<button name=\"submit\" type=\"submit\" class=\"weui-btn weui-btn_mini weui-btn_default\">查看</button>&nbsp;" +
+                "<a href=\"/diary/addOrEdit.shtml?id=" + diary.id + "\" ><button type=\"button\" class=\"weui-btn weui-btn_mini weui-btn_primary\">编辑</button></a>&nbsp;" +
+                "<button type=\"button\" onclick=\"_delete(" + diary.id + ",'" + diary.title + "')\" class=\"weui-btn weui-btn_mini weui-btn_warn\">删除</button> " +
+                "</form>" +
                 "</li>" +
                 "</ul> " +
-                "</div>")
-        $("#diaryData ul:last-child").append("")
+                "</div>");
+    }
+
+    function addfriend(diary) {
+        $("#diaryData").append("<div class=\"weui-media-box weui-media-box_text\"> " +
+                "<h4 class=\"weui-media-box__title\">" + diary.title + "</h4> " +
+                "<p class=\"weui-media-box__desc\">" + diary.content + "</p> " +
+                "<ul class=\"weui-media-box__info\"> " +
+                "<li class=\"weui-media-box__info__meta\">作者:" + diary.userName + "</li> " +
+                "<li class=\"weui-media-box__info__meta\">时间:" + diary.createOn + "</li>" +
+                "<li class=\"weui-media-box__info__meta\" style=\"float: right\">" +
+                "<form id=\"subform\" action=\"/diary/showDiary.shtml\" method=\"post\">" +
+                "<input id=\"id\" name=\"id\" value=\"" + diary.id + "\" hidden=\"hidden\" />" +
+                "<button name=\"submit\" type=\"submit\" class=\"weui-btn weui-btn_mini weui-btn_default\">查看</button>&nbsp;" +
+                "</form>" +
+                "</li>" +
+                "</ul> " +
+                "</div>");
     }
 
     function getDiaryList() {
         var title = $("#searchInput").val();
         $.showLoading("查找中...");
-        getDiarys(title,true);
+        getDiarys(title, true);
         return false;
     }
 
@@ -118,7 +142,7 @@
             url: "/diary/getDiaryList.do",
             dataType: "json",
             data: {
-                "type": "${type ! ""}",
+                "type": type,
                 "title": title
             },
             success: function (data, textStatus) {
@@ -131,7 +155,11 @@
                         }
                         $("#diaryData").empty();
                         for (var a = 0; a < data.data.length; a++) {
-                            add(data.data[a]);
+                            if (type == 'my'){
+                                addmy(data.data[a]);
+                            }else {
+                                addfriend(data.data[a]);
+                            }
                         }
                     }
                     else {
@@ -166,7 +194,7 @@
 
                             $.toast(data.message, function () {
                             });
-                            getDiarys("",false);
+                            getDiarys("", false);
                         }
                         else {
                             $.toast(data.message, "cancel", function (toast) {
@@ -185,6 +213,12 @@
         }, function () {
             //取消操作
         });
+    }
+
+    function _submit() {
+//        document.getElementById('subform').submit();
+        $("#subform").submit();
+        return false;
     }
 </script>
 </body>

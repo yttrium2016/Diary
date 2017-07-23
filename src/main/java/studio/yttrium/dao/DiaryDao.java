@@ -43,5 +43,5 @@ public interface DiaryDao {
 
     int updateByPrimaryKey(Diary record);
 
-    int updateByDelete(int id);
+    int updateByDelete(DiaryExample example);
 }

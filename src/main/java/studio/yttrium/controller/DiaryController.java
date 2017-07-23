@@ -41,12 +41,16 @@ public class DiaryController {
     public String addOrEdit(HttpServletRequest request, Model view) {
 
         try {
+            User user = (User) request.getSession().getAttribute("loginUser");
             String idStr = request.getParameter("id");
             int id = Integer.parseInt(idStr);
-            Diary diary = diaryService.getDiary(id);
+            Diary diary = diaryService.getDiary(id, user.getId());
             if (diary != null) {
                 view.addAttribute("diary", diary);
+            } else {
+                return "common/404";
             }
+
         } catch (Exception e) {
             LoggerUtils.error(DiaryController.class, "addOrEdit 反正出错了", e);
         }
@@ -97,7 +101,7 @@ public class DiaryController {
         try {
             String idStr = request.getParameter("id");
             int id = Integer.parseInt(idStr);
-            Diary diary = diaryService.getDiary(id);
+            Diary diary = diaryService.getDiary(id,null);
             if (diary != null) {
                 view.addAttribute("diary", diary);
             }
@@ -108,7 +112,7 @@ public class DiaryController {
         return "mobile/show";
     }
 
-    @RequestMapping(value = "getDiary", method = RequestMethod.POST)
+    /*@RequestMapping(value = "getDiary", method = RequestMethod.POST)
     @ResponseBody
     public DefaultResult getDiary(HttpServletRequest request) {
 
@@ -129,25 +133,29 @@ public class DiaryController {
         }
 
         return result;
-    }
+    }*/
 
     @RequestMapping(value = "delete", method = RequestMethod.POST)
     @ResponseBody
     public DefaultResult delete(HttpServletRequest request) {
 
         DefaultResult result = new DefaultResult();
+        result.setCode(0);
+        result.setMessage("删除失败");
 
         try {
             String idStr = request.getParameter("id");
+            User user = (User) request.getSession().getAttribute("loginUser");
             int id = Integer.parseInt(idStr);
-            int res = diaryService.updateDiaryByDelete(id);
-            if (res > 0) {
-                result.setCode(1);
-                result.setMessage("删除成功");
+            if (user != null) {
+                int res = diaryService.updateDiaryByDelete(id, user.getId());
+                if (res > 0) {
+                    result.setCode(1);
+                    result.setMessage("删除成功");
+                }
             }
         } catch (Exception e) {
-            result.setCode(0);
-            result.setMessage("删除失败");
+            LoggerUtils.error(this.getClass(),"删除出错",e);
         }
 
         return result;

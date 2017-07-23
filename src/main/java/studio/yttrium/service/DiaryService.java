@@ -13,6 +13,7 @@ import java.util.List;
 public interface DiaryService {
     /**
      * 保存或者修改日记
+     *
      * @param diary
      * @return
      */
@@ -20,13 +21,15 @@ public interface DiaryService {
 
     /**
      * 通过id查找日记
+     *
      * @param id
      * @return
      */
-    Diary getDiary(int id);
+    Diary getDiary(int id, Integer userId);
 
     /**
      * 查询所有日记
+     *
      * @param diary
      * @return
      */
@@ -34,16 +37,20 @@ public interface DiaryService {
 
     /**
      * 查询所有日记通过userIds和name
+     *
      * @param privilegeList
      * @param title
      * @return
      */
-    List<Diary> listDiaryByUserIds(List<Integer> privilegeList,String title);
+    List<Diary> listDiaryByUserIds(List<Integer> privilegeList, String title);
 
     /**
      * 删除
+     *
+     *
      * @param id
+     * @param userId
      * @return
      */
-    int updateDiaryByDelete(int id);
+    int updateDiaryByDelete(int id, int userId);
 }

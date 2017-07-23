@@ -363,10 +363,12 @@
   </update>
 
 
-    <update id="updateByDelete" parameterType="java.lang.Integer">
+    <update id="updateByDelete" parameterType="studio.yttrium.pojo.DiaryExample">
         update diary
         set create_by = 0
-        where id = #{id,jdbcType=INTEGER}
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
     </update>
 
 

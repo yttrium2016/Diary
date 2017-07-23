@@ -23,15 +23,27 @@ public class DiaryServiceImpl implements DiaryService {
     private DiaryDao diaryDao;
 
     public int saveOrUpdate(Diary diary) {
-        if (diary.getId() == null){
+        if (diary.getId() == null) {
             return diaryDao.insertSelectiveResultId(diary);
-        }else{
+        } else {
             return diaryDao.updateByPrimaryKeySelective(diary);
         }
     }
 
-    public Diary getDiary(int id) {
-        return diaryDao.selectByPrimaryKey(id);
+    public Diary getDiary(int id, Integer userId) {
+        DiaryExample example = new DiaryExample();
+        DiaryExample.Criteria criteria = example.createCriteria();
+        criteria.andIdEqualTo(id);
+        if (userId != null){
+            criteria.andCreateByEqualTo(userId);
+        }
+        List<Diary> list = diaryDao.selectByExampleWithBLOBs(example);
+        if (list != null && list.size() == 1){
+            return list.get(0);
+        }else {
+            return null;
+        }
+
     }
 
     public List<Diary> listDiary(Diary diary) {
@@ -43,14 +55,18 @@ public class DiaryServiceImpl implements DiaryService {
         DiaryExample example = new DiaryExample();
         DiaryExample.Criteria criteria = example.createCriteria();
         criteria.andCreateByIn(privilegeList);
-        if (StringUtils.isNotBlank(title)){
-            criteria.andTitleLike("%"+title+"%");
+        if (StringUtils.isNotBlank(title)) {
+            criteria.andTitleLike("%" + title + "%");
         }
         example.setOrderByClause(" create_on DESC ");
         return diaryDao.selectByExampleLeftUser(example);
     }
 
-    public int updateDiaryByDelete(int id) {
-        return diaryDao.updateByDelete(id);
+    public int updateDiaryByDelete(int id, int userId) {
+        DiaryExample example = new DiaryExample();
+        DiaryExample.Criteria criteria = example.createCriteria();
+        criteria.andIdEqualTo(id);
+        criteria.andCreateByEqualTo(userId);
+        return diaryDao.updateByDelete(example);
     }
 }
