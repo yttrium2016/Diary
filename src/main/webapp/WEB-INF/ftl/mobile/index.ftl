@@ -116,7 +116,7 @@
             退出
         </p>
     </a>
-    <a onclick="showToast(this)" class="weui-grid js_grid">
+    <#--<a onclick="showToast(this)" class="weui-grid js_grid">
         <div class="weui-grid__icon">
             <img src="/img/icon_nav_progress.png" alt="">
         </div>
@@ -181,14 +181,6 @@
             Loadmore
         </p>
     </a>
-<#--</div>
-
-<div class="demos-header">
-    <h2 class='demos-second-title'>拓展组件</h2>
-    <p class='demos-sub-title'>jQuery WeUI 专属组件</p>
-</div>
-
-<div class="weui-grids">-->
     <a onclick="showToast(this)" class="weui-grid js_grid">
         <div class="weui-grid__icon">
             <img src="/img/icon_nav_ptr.png" alt="">
@@ -262,7 +254,7 @@
         <p class="weui-grid__label">
             Photos
         </p>
-    </a>
+    </a>-->
 </div>
 
 <div class="weui-footer">
