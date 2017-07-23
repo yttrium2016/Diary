@@ -12,6 +12,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 /**
+ * 权利相关Controller
  * Created with IntelliJ IDEA
  * Created By 杨振宇
  * Date: 2017/7/22
@@ -24,6 +25,11 @@ public class PrivilegeController {
     @Resource
     private PrivilegeService privilegeService;
 
+    /**
+     * 删除权限的接口
+     * @param request
+     * @return
+     */
     @RequestMapping(value = "delete", method = RequestMethod.POST)
     @ResponseBody
     public DefaultResult delete(HttpServletRequest request) {
@@ -50,6 +56,11 @@ public class PrivilegeController {
         return result;
     }
 
+    /**
+     * 添加权限的接口
+     * @param request
+     * @return
+     */
     @RequestMapping(value = "add", method = RequestMethod.POST)
     @ResponseBody
     public DefaultResult add(HttpServletRequest request) {

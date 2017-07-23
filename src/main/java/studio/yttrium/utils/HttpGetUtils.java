@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
 /**
+ * 封装好的Http请求类(来源网上)
  * Created with IntelliJ IDEA
  * Created By 杨振宇
  * Date: 2017/7/17

@@ -3,7 +3,14 @@ package studio.yttrium.utils;
 import javax.net.ssl.*;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
- 
+
+/**
+ * 封装好的Http请求类对应ssl的(来源网上)
+ * Created with IntelliJ IDEA
+ * Created By 杨振宇
+ * Date: 2017/7/17
+ * Time: 17:47
+ */
 public class SslUtils {
  
     private static void trustAllHttpsCertificates() throws Exception {

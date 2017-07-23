@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
+ * 用户相关Controller
  * Created with IntelliJ IDEA
  * Created By 杨振宇
  * Date: 2017/7/14
@@ -29,14 +30,22 @@ public class UserController {
     private UserService userService;
 
 
+    /**
+     * 退出登录
+     * @param request
+     * @return
+     */
     @RequestMapping("logout")
     public String logout(HttpServletRequest request) {
-
         request.getSession().removeAttribute("loginUser");
-
         return "mobile/login";
     }
 
+    /**
+     * 登录的接口
+     * @param request
+     * @return
+     */
     @RequestMapping(value = "login", method = RequestMethod.POST)
     @ResponseBody
     public DefaultResult login(HttpServletRequest request) {
@@ -48,7 +57,6 @@ public class UserController {
         String loginName = request.getParameter("loginName");
         String loginPassword = request.getParameter("loginPassword");
 
-        System.out.println("接收到了" + loginName + "," + loginPassword);
         if (StringUtils.isNotBlank(loginName, loginPassword)) {
             User user = userService.findUserByLoginName(loginName);
             String psw = StringUtils.getSHA256(StringUtils.getMD5(loginPassword));
@@ -65,6 +73,11 @@ public class UserController {
     }
 
 
+    /**
+     * 注册的接口
+     * @param request
+     * @return
+     */
     @RequestMapping(value = "register", method = RequestMethod.POST)
     @ResponseBody
     public DefaultResult register(HttpServletRequest request) {
@@ -77,8 +90,6 @@ public class UserController {
         String userName = request.getParameter("userName");
         String loginPassword = request.getParameter("loginPassword");
         String rePassword = request.getParameter("rePassword");
-
-        System.out.println("接收到了" + loginName + "," + loginPassword + "," + rePassword + "," + userName);
 
         if (StringUtils.isBlank(loginName, userName, loginPassword, rePassword)) {
             result.setMessage("所填项不能为空");
@@ -112,6 +123,11 @@ public class UserController {
         return result;
     }
 
+    /**
+     * 修改用户的接口(本来应该和注册写在一起的后来懒的改了)
+     * @param request
+     * @return
+     */
     @RequestMapping(value = "edit", method = RequestMethod.POST)
     @ResponseBody
     public DefaultResult edit(HttpServletRequest request) {
@@ -125,12 +141,12 @@ public class UserController {
         String loginPassword = request.getParameter("loginPassword");
         String rePassword = request.getParameter("rePassword");
 
-        System.out.println("接收到了" + loginName + "," + loginPassword + "," + rePassword + "," + userName);
-
         User loginUser = (User) request.getSession().getAttribute("loginUser");
-        if (StringUtils.isBlank(loginName, userName)) {
-            result.setMessage("全为空就别改了嘛");
-            return result;
+        if (!StringUtils.isNotBlank(loginName, userName)) {
+            if (!StringUtils.isNotBlank(loginPassword, rePassword)) {
+                result.setMessage("全为空就别改了嘛");
+                return result;
+            }
         }
 
         if (StringUtils.isNotBlank(loginPassword, rePassword)) {
@@ -143,7 +159,7 @@ public class UserController {
             }
         }
 
-        if (StringUtils.isNotBlank(loginName)) {
+        if (StringUtils.isNotBlank(loginName) && !loginUser.getLoginName().equals(loginName)) {
             User dbUser = userService.findUserByLoginName(loginName);
             if (dbUser != null) {
                 result.setMessage("登录名字已经存在");
@@ -167,6 +183,11 @@ public class UserController {
         return result;
     }
 
+    /**
+     * 获取用户列表的接口
+     * @param request
+     * @return
+     */
     @RequestMapping(value = "getUserList", method = RequestMethod.POST)
     @ResponseBody
     public DefaultResult getUserList(HttpServletRequest request) {
@@ -193,6 +214,13 @@ public class UserController {
         return result;
     }
 
+    /**
+     * 授权的页面转跳
+     *  需要login的权限
+     * @param request
+     * @param view
+     * @return
+     */
     @RequestMapping("accredit")
     @PrivilegeInfo(name = "login")
     public String accredit(HttpServletRequest request, Model view) {
@@ -210,6 +238,13 @@ public class UserController {
         return "mobile/accredit";
     }
 
+    /**
+     * 编辑用户的转跳
+     *  需要login的权限
+     * @param request
+     * @param view
+     * @return
+     */
     @RequestMapping("editUser")
     @PrivilegeInfo(name = "login")
     public String editUser(HttpServletRequest request, Model view) {

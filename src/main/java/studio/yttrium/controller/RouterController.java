@@ -16,21 +16,29 @@ import studio.yttrium.annotation.PrivilegeInfo;
 @Controller
 public class RouterController {
 
+    /**
+     * 登录的路由
+     * @return
+     */
     @RequestMapping("login")
     public String login() {
         return "mobile/login";
     }
 
-    @RequestMapping("demo")
-    public String demo() {
-        return "mobile/edit_user";
-    }
 
+    /**
+     * 注册的路由
+     * @return
+     */
     @RequestMapping("register")
     public String register() {
         return "mobile/register";
     }
 
+    /**
+     * 去主页的路由
+     * @return
+     */
     @PrivilegeInfo(name = "login")
     @RequestMapping("index")
     public String index() {
@@ -38,6 +46,10 @@ public class RouterController {
     }
 
 
+    /**
+     * 没有权限的页面 后来直接放弃了 直接404了
+     * @return
+     */
     @RequestMapping("noPermission")
     public ModelAndView noPermission() {
         ModelAndView noPermission = new ModelAndView("common/error");
@@ -46,8 +58,4 @@ public class RouterController {
         return noPermission;
     }
 
-    /*@RequestMapping("{str}")
-    public String other(@PathVariable String str) {
-        return str;
-    }*/
 }

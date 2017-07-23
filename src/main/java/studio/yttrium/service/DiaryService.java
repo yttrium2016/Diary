@@ -5,6 +5,7 @@ import studio.yttrium.pojo.Diary;
 import java.util.List;
 
 /**
+ * 日记Service接口
  * Created with IntelliJ IDEA
  * Created By 杨振宇
  * Date: 2017/7/16

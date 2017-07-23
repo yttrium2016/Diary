@@ -21,6 +21,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
+ * 日记相关Controller
  * Created with IntelliJ IDEA
  * Created By 杨振宇
  * Date: 2017/7/16
@@ -36,6 +37,13 @@ public class DiaryController {
     @Resource
     private PrivilegeService privilegeService;
 
+    /**
+     * 添加或者编辑的页面转跳(添加用户和修改用户应该这么操作)
+     *  需要login权限
+     * @param request
+     * @param view
+     * @return
+     */
     @PrivilegeInfo(name = "login")
     @RequestMapping("addOrEdit")
     public String addOrEdit(HttpServletRequest request, Model view) {
@@ -58,6 +66,12 @@ public class DiaryController {
         return "mobile/add_edit_diary";
     }
 
+    /**
+     * 添加和编辑日记的接口
+     * @param request
+     * @param diary
+     * @return
+     */
     @RequestMapping(value = "addOrEditDiary", method = RequestMethod.POST)
     @ResponseBody
     public DefaultResult addOrEditDiary(HttpServletRequest request, Diary diary) {
@@ -88,12 +102,18 @@ public class DiaryController {
                 result.setMessage("成功");
                 result.setRedirect("/diary/addOrEdit.shtml?id=" + diary.getId());
             }
-
         }
 
         return result;
     }
 
+    /**
+     * 显示日记的页面转跳
+     *  需要login权限
+     * @param request
+     * @param view
+     * @return
+     */
     @PrivilegeInfo(name = "login")
     @RequestMapping("showDiary")
     public String showDiary(HttpServletRequest request, Model view) {
@@ -112,29 +132,11 @@ public class DiaryController {
         return "mobile/show";
     }
 
-    /*@RequestMapping(value = "getDiary", method = RequestMethod.POST)
-    @ResponseBody
-    public DefaultResult getDiary(HttpServletRequest request) {
-
-        DefaultResult result = new DefaultResult();
-
-        try {
-            String idStr = request.getParameter("id");
-            int id = Integer.parseInt(idStr);
-            Diary diary = diaryService.getDiary(id);
-            if (diary != null) {
-                result.setData(diary);
-                result.setCode(1);
-                result.setMessage("操作成功");
-            }
-        } catch (Exception e) {
-            result.setCode(0);
-            result.setMessage("操作失败");
-        }
-
-        return result;
-    }*/
-
+    /**
+     * 删除日记的接口
+     * @param request
+     * @return
+     */
     @RequestMapping(value = "delete", method = RequestMethod.POST)
     @ResponseBody
     public DefaultResult delete(HttpServletRequest request) {
@@ -161,6 +163,13 @@ public class DiaryController {
         return result;
     }
 
+    /**
+     * 显示日记列表的转跳
+     *  需要login权限
+     * @param request
+     * @param view
+     * @return
+     */
     @PrivilegeInfo(name = "login")
     @RequestMapping(value = "listDiary")
     public String listDiary(HttpServletRequest request, Model view) {
@@ -199,6 +208,11 @@ public class DiaryController {
 
     }
 
+    /**
+     * 查找日记的接口(为了良好的用户体验 有点蠢)
+     * @param request
+     * @return
+     */
     @RequestMapping(value = "getDiaryList", method = RequestMethod.POST)
     @ResponseBody
     public DefaultResult getDiaryList(HttpServletRequest request) {

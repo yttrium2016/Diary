@@ -5,6 +5,7 @@ import studio.yttrium.pojo.User;
 import java.util.List;
 
 /**
+ * 用户Service接口
  * Created with IntelliJ IDEA
  * Created By 杨振宇
  * Date: 2017/7/14

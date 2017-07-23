@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
+ * 自定义拦截器 配合 注解 实现登录的权限控制 其实纯属多余
  * Created with IntelliJ IDEA
  * Created By 杨振宇
  * Date: 2017/7/16
@@ -24,17 +25,19 @@ public class PrivilegeInterceptor implements HandlerInterceptor {
         if(info != null) {
             String name = info.name();
 
+            //根据type与write，结合session/cookie等身份信息进行检查
+            //如果权限检查不通过，可以输出特定信息、进行跳转等操作
+            //并且一定要return false，表示被拦截的方法不用继续执行了
             if ("login".equals(name)){
                 Object loginUser = request.getSession().getAttribute("loginUser");
                 if (loginUser == null){
                     response.sendRedirect("/login.shtml?error=1");
-//                    request.getRequestDispatcher("/login.shtml").forward(request, response);
+                    //喜欢重定向 哈哈
+                    //request.getRequestDispatcher("/login.shtml").forward(request, response);
                     return false;
                 }
             }
-            //根据type与write，结合session/cookie等身份信息进行检查
-            //如果权限检查不通过，可以输出特定信息、进行跳转等操作
-            //并且一定要return false，表示被拦截的方法不用继续执行了
+
         }
 
         //检查通过，返回true，方法会继续执行

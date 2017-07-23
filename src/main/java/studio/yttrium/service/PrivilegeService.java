@@ -3,6 +3,7 @@ package studio.yttrium.service;
 import java.util.List;
 
 /**
+ * 权限Service接口
  * Created with IntelliJ IDEA
  * Created By 杨振宇
  * Date: 2017/7/19

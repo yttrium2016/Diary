@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 /**
+ * 获取ip 不过没用上
  * Created with IntelliJ IDEA
  * Created By 杨振宇
  * Date: 2017/7/22

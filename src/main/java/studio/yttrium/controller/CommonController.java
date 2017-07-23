@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 /**
+ * 通用请求
  * Created with IntelliJ IDEA
  * Created By 杨振宇
  * Date: 2017/7/5
@@ -67,6 +68,12 @@ public class CommonController {
         return view;
     }
 
+    /**
+     * 获取天气的接口(在编写日记那边)
+     * @param request
+     * @return
+     * @throws IOException
+     */
     @RequestMapping(value = "getWeatherByCity")
     @ResponseBody
     public Object getWeatherByCity(HttpServletRequest request) throws IOException {
