@@ -49,11 +49,11 @@ public class UserController {
         String loginPassword = request.getParameter("loginPassword");
 
         System.out.println("接收到了" + loginName + "," + loginPassword);
-        if (StringUtils.isNotBlank(loginName)) {
+        if (StringUtils.isNotBlank(loginName, loginPassword)) {
             User user = userService.findUserByLoginName(loginName);
             String psw = StringUtils.getSHA256(StringUtils.getMD5(loginPassword));
 
-            if (user!=null && user.getLoginPassword()!=null && user.getLoginPassword().equals(psw)) {
+            if (user != null && user.getLoginPassword() != null && user.getLoginPassword().equals(psw)) {
                 request.getSession().setAttribute("loginUser", user);
                 result.setCode(1);
                 result.setMessage("登录成功");
@@ -61,6 +61,109 @@ public class UserController {
             }
 
         }
+        return result;
+    }
+
+
+    @RequestMapping(value = "register", method = RequestMethod.POST)
+    @ResponseBody
+    public DefaultResult register(HttpServletRequest request) {
+
+        DefaultResult result = new DefaultResult();
+        result.setCode(0);
+        result.setMessage("注册失败");
+
+        String loginName = request.getParameter("loginName");
+        String userName = request.getParameter("userName");
+        String loginPassword = request.getParameter("loginPassword");
+        String rePassword = request.getParameter("rePassword");
+
+        System.out.println("接收到了" + loginName + "," + loginPassword + "," + rePassword + "," + userName);
+
+        if (StringUtils.isBlank(loginName, userName, loginPassword, rePassword)) {
+            result.setMessage("所填项不能为空");
+            return result;
+        } else {
+
+            User dbUser = userService.findUserByLoginName(loginName);
+            if (dbUser != null) {
+                result.setMessage("登录名已存在");
+                return result;
+            }
+
+            if (!loginPassword.equals(rePassword)) {
+                result.setMessage("两次密码不一致");
+                return result;
+            }
+
+            User user = new User();
+            String psw = StringUtils.getSHA256(StringUtils.getMD5(loginPassword));
+            user.setLoginName(loginName);
+            user.setLoginPassword(psw);
+            user.setUserName(userName);
+            int res = userService.addUser(user);
+            if (res > 0) {
+                result.setCode(1);
+                result.setMessage("注册成功");
+                result.setRedirect("/login.shtml");
+            }
+
+        }
+        return result;
+    }
+
+    @RequestMapping(value = "edit", method = RequestMethod.POST)
+    @ResponseBody
+    public DefaultResult edit(HttpServletRequest request) {
+
+        DefaultResult result = new DefaultResult();
+        result.setCode(0);
+        result.setMessage("修改失败");
+
+        String loginName = request.getParameter("loginName");
+        String userName = request.getParameter("userName");
+        String loginPassword = request.getParameter("loginPassword");
+        String rePassword = request.getParameter("rePassword");
+
+        System.out.println("接收到了" + loginName + "," + loginPassword + "," + rePassword + "," + userName);
+
+        User loginUser = (User) request.getSession().getAttribute("loginUser");
+        if (StringUtils.isBlank(loginName, userName)) {
+            result.setMessage("全为空就别改了嘛");
+            return result;
+        }
+
+        if (StringUtils.isNotBlank(loginPassword, rePassword)) {
+            if (!loginPassword.equals(rePassword)) {
+                result.setMessage("两次密码不一致");
+                return result;
+            } else {
+                String psw = StringUtils.getSHA256(StringUtils.getMD5(loginPassword));
+                loginUser.setLoginPassword(psw);
+            }
+        }
+
+        if (StringUtils.isNotBlank(loginName)) {
+            User dbUser = userService.findUserByLoginName(loginName);
+            if (dbUser != null) {
+                result.setMessage("登录名字已经存在");
+                return result;
+            } else {
+                loginUser.setLoginName(loginName);
+            }
+        }
+
+        if (StringUtils.isNotBlank(userName)) {
+            loginUser.setUserName(userName);
+        }
+
+        int res = userService.editUser(loginUser);
+        if (res > 0) {
+            result.setCode(1);
+            result.setMessage("修改成功");
+            result.setRedirect("/index.shtml");
+        }
+
         return result;
     }
 
@@ -82,7 +185,7 @@ public class UserController {
                 result.setMessage("获取成功");
                 result.setData(userList);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             result.setCode(0);
             result.setMessage("获取失败");
         }
@@ -101,10 +204,21 @@ public class UserController {
             userList = userService.getUserList(loginUser.getId());
             privilegeUserList = userService.findUserLeftPrivilege(loginUser.getId());
         }
-        if (userList != null) view.addAttribute("userList",userList);
-        if (privilegeUserList != null) view.addAttribute("privilegeUserList",privilegeUserList);
+        if (userList != null) view.addAttribute("userList", userList);
+        if (privilegeUserList != null) view.addAttribute("privilegeUserList", privilegeUserList);
 
         return "mobile/accredit";
+    }
+
+    @RequestMapping("editUser")
+    @PrivilegeInfo(name = "login")
+    public String editUser(HttpServletRequest request, Model view) {
+
+        User loginUser = (User) request.getSession().getAttribute("loginUser");
+        if (loginUser != null) {
+            view.addAttribute("user", loginUser);
+        }
+        return "mobile/edit_user";
     }
 
 }

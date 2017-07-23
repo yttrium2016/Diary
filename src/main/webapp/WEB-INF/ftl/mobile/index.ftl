@@ -100,7 +100,7 @@
             朋友日记
         </p>
     </a>
-    <a href="toast.html" class="weui-grid js_grid">
+    <a href="/user/editUser.shtml" class="weui-grid js_grid">
         <div class="weui-grid__icon">
             <img src="/img/icon_nav_panel.png" alt="">
         </div>

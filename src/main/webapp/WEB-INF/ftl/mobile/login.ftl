@@ -53,7 +53,7 @@
 <div class="weui-flex">
     <div class="weui-flex__item">
         <div class="weui-btn-area">
-            <a class="weui-btn weui-btn_primary" href="javascript:" id="btnRegister">注册</a>
+            <a class="weui-btn weui-btn_primary" href="/register.shml" id="btnRegister">注册</a>
         </div>
     </div>
     <div class="weui-flex__item">

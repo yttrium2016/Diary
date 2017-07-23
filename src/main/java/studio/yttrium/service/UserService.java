@@ -33,4 +33,18 @@ public interface UserService {
      * @return
      */
     List<User> findUserLeftPrivilege(Integer id);
+
+    /**
+     * 添加用户
+     * @param user
+     * @return
+     */
+    int addUser(User user);
+
+    /**
+     * 修改用户
+     * @param loginUser
+     * @return
+     */
+    int editUser(User loginUser);
 }

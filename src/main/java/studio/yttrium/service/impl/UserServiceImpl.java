@@ -37,4 +37,12 @@ public class UserServiceImpl implements UserService {
     public List<User> findUserLeftPrivilege(Integer id) {
         return userDao.selectUserLeftPrivilege(id);
     }
+
+    public int addUser(User user) {
+        return userDao.insertSelective(user);
+    }
+
+    public int editUser(User loginUser) {
+        return userDao.updateByPrimaryKeySelective(loginUser);
+    }
 }

@@ -21,6 +21,16 @@ public class RouterController {
         return "mobile/login";
     }
 
+    @RequestMapping("demo")
+    public String demo() {
+        return "mobile/edit_user";
+    }
+
+    @RequestMapping("register")
+    public String register() {
+        return "mobile/register";
+    }
+
     @PrivilegeInfo(name = "login")
     @RequestMapping("index")
     public String index() {
