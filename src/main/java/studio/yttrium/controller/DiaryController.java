@@ -72,6 +72,7 @@ public class DiaryController {
      * @param diary
      * @return
      */
+    @PrivilegeInfo(name = "login")
     @RequestMapping(value = "addOrEditDiary", method = RequestMethod.POST)
     @ResponseBody
     public DefaultResult addOrEditDiary(HttpServletRequest request, Diary diary) {
@@ -137,6 +138,7 @@ public class DiaryController {
      * @param request
      * @return
      */
+    @PrivilegeInfo(name = "login")
     @RequestMapping(value = "delete", method = RequestMethod.POST)
     @ResponseBody
     public DefaultResult delete(HttpServletRequest request) {
@@ -213,6 +215,7 @@ public class DiaryController {
      * @param request
      * @return
      */
+    @PrivilegeInfo(name = "login")
     @RequestMapping(value = "getDiaryList", method = RequestMethod.POST)
     @ResponseBody
     public DefaultResult getDiaryList(HttpServletRequest request) {

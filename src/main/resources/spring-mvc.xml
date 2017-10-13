@@ -23,7 +23,6 @@
     <mvc:resources location="/lib/" mapping="/lib/**"/>
     <mvc:resources location="/css/" mapping="/css/**"/>
     <mvc:resources location="/img/" mapping="/img/**"/>
-    <mvc:resources location="/html/" mapping="/html/**"/>
 
     <mvc:interceptors>
         <mvc:interceptor>

@@ -128,6 +128,7 @@ public class UserController {
      * @param request
      * @return
      */
+    @PrivilegeInfo(name = "login")
     @RequestMapping(value = "edit", method = RequestMethod.POST)
     @ResponseBody
     public DefaultResult edit(HttpServletRequest request) {
@@ -188,6 +189,7 @@ public class UserController {
      * @param request
      * @return
      */
+    @PrivilegeInfo(name = "login")
     @RequestMapping(value = "getUserList", method = RequestMethod.POST)
     @ResponseBody
     public DefaultResult getUserList(HttpServletRequest request) {
