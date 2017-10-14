@@ -91,10 +91,9 @@ public class DiaryServiceImpl implements DiaryService {
      * @return
      */
     public int updateDiaryByDelete(int id, int userId) {
-        DiaryExample example = new DiaryExample();
-        DiaryExample.Criteria criteria = example.createCriteria();
-        criteria.andIdEqualTo(id);
-        criteria.andCreateByEqualTo(userId);
-        return diaryDao.updateByDelete(example);
+        Diary diary = new Diary();
+        diary.setId(id);
+        diary.setCreateBy(0-userId);
+        return diaryDao.updateByPrimaryKeySelective(diary);
     }
 }

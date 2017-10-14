@@ -42,6 +42,4 @@ public interface DiaryDao {
     int updateByPrimaryKeyWithBLOBs(Diary record);
 
     int updateByPrimaryKey(Diary record);
-
-    int updateByDelete(DiaryExample example);
 }

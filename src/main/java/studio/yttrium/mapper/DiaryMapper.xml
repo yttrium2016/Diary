@@ -362,16 +362,6 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-
-    <update id="updateByDelete" parameterType="studio.yttrium.pojo.DiaryExample">
-        update diary
-        set create_by = 0
-        <if test="_parameter != null">
-            <include refid="Example_Where_Clause"/>
-        </if>
-    </update>
-
-
     <select id="selectLeftUser" parameterType="studio.yttrium.pojo.Diary" resultMap="BaseResultMap">
         select
         d.*,u.user_name
