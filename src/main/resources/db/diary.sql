@@ -70,3 +70,17 @@ CREATE TABLE `user` (
 INSERT INTO `user` VALUES ('1', 'yzy', '65829e542dd151f443cc997270c61e78c042a82d687cc13844bf2c1813714600', '小杨');
 INSERT INTO `user` VALUES ('2', 'test', '65829e542dd151f443cc997270c61e78c042a82d687cc13844bf2c1813714600', '小泰');
 
+-- ----------------------------
+-- Table structure for log
+-- ----------------------------
+DROP TABLE IF EXISTS `log`;
+CREATE TABLE `log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `user_id` int(11) DEFAULT NULL COMMENT '用户ID',
+  `user_name` varchar(255) DEFAULT NULL COMMENT '用户名',
+  `message` varchar(255) DEFAULT NULL COMMENT '日志信息',
+  `date_time` varchar(255) DEFAULT NULL COMMENT '时间',
+  `ip` varchar(255) DEFAULT NULL COMMENT 'ip地址',
+  `method_name` varchar(255) DEFAULT NULL COMMENT '执行方法名',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
