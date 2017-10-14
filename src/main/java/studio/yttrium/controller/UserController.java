@@ -5,6 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import studio.yttrium.annotation.LogInfo;
 import studio.yttrium.annotation.PrivilegeInfo;
 import studio.yttrium.pojo.DefaultResult;
 import studio.yttrium.pojo.User;
@@ -36,6 +37,7 @@ public class UserController {
      * @return
      */
     @RequestMapping("logout")
+    @LogInfo(message = "退出登录")
     public String logout(HttpServletRequest request) {
         request.getSession().removeAttribute("loginUser");
         return "mobile/login";
@@ -46,6 +48,7 @@ public class UserController {
      * @param request
      * @return
      */
+    @LogInfo(message = "登录日记本")
     @RequestMapping(value = "login", method = RequestMethod.POST)
     @ResponseBody
     public DefaultResult login(HttpServletRequest request) {
@@ -78,6 +81,7 @@ public class UserController {
      * @param request
      * @return
      */
+    @LogInfo(message = "日记本注册")
     @RequestMapping(value = "register", method = RequestMethod.POST)
     @ResponseBody
     public DefaultResult register(HttpServletRequest request) {
@@ -128,6 +132,7 @@ public class UserController {
      * @param request
      * @return
      */
+    @LogInfo(message = "修改用户信息")
     @PrivilegeInfo(name = "login")
     @RequestMapping(value = "edit", method = RequestMethod.POST)
     @ResponseBody
@@ -189,6 +194,7 @@ public class UserController {
      * @param request
      * @return
      */
+    @LogInfo(message = "获取用户列表")
     @PrivilegeInfo(name = "login")
     @RequestMapping(value = "getUserList", method = RequestMethod.POST)
     @ResponseBody
@@ -223,6 +229,7 @@ public class UserController {
      * @param view
      * @return
      */
+    @LogInfo(message = "进入用户授权界面")
     @RequestMapping("accredit")
     @PrivilegeInfo(name = "login")
     public String accredit(HttpServletRequest request, Model view) {
@@ -247,6 +254,7 @@ public class UserController {
      * @param view
      * @return
      */
+    @LogInfo(message = "进入用户编辑界面")
     @RequestMapping("editUser")
     @PrivilegeInfo(name = "login")
     public String editUser(HttpServletRequest request, Model view) {

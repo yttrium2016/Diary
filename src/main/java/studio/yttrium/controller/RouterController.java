@@ -3,6 +3,7 @@ package studio.yttrium.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import studio.yttrium.annotation.LogInfo;
 import studio.yttrium.annotation.PrivilegeInfo;
 
 /**
@@ -40,6 +41,7 @@ public class RouterController {
      * @return
      */
     @PrivilegeInfo(name = "login")
+    @LogInfo(message = "进入主页")
     @RequestMapping("index")
     public String index() {
         return "mobile/index";

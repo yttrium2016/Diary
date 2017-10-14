@@ -15,6 +15,9 @@
 
 	<!-- 扫描service、dao组件 -->
 	<context:component-scan base-package="studio.yttrium" />
+
+	<aop:aspectj-autoproxy />
+
 	<!-- 分解配置 jdbc.properites -->
 	<bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
@@ -81,11 +84,18 @@
 		</tx:attributes>
 	</tx:advice>
 
+	<bean id="logAspect" class="studio.yttrium.aspect.LogAspect"/>
+
 	<aop:config>
-		<aop:pointcut id="transactionPointcut"
-			expression="execution(* studio.yttrium.service..*.*(..))" />
+		<aop:pointcut id="transactionPointcut" expression="execution(* studio.yttrium.service..*.*(..))" />
+
 		<aop:advisor pointcut-ref="transactionPointcut"
 			advice-ref="transactionAdvice" />
+
 	</aop:config>
+
+
+
+
 
 </beans>              

@@ -4,6 +4,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import studio.yttrium.annotation.LogInfo;
+import studio.yttrium.annotation.PrivilegeInfo;
 import studio.yttrium.pojo.DefaultResult;
 import studio.yttrium.pojo.User;
 import studio.yttrium.service.PrivilegeService;
@@ -30,6 +32,8 @@ public class PrivilegeController {
      * @param request
      * @return
      */
+    @PrivilegeInfo(name = "login")
+    @LogInfo(message = "删除权限")
     @RequestMapping(value = "delete", method = RequestMethod.POST)
     @ResponseBody
     public DefaultResult delete(HttpServletRequest request) {
@@ -61,6 +65,7 @@ public class PrivilegeController {
      * @param request
      * @return
      */
+    @LogInfo(message = "添加权限")
     @RequestMapping(value = "add", method = RequestMethod.POST)
     @ResponseBody
     public DefaultResult add(HttpServletRequest request) {

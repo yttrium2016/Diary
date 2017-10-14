@@ -5,6 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import studio.yttrium.annotation.LogInfo;
 import studio.yttrium.annotation.PrivilegeInfo;
 import studio.yttrium.pojo.DefaultResult;
 import studio.yttrium.pojo.Diary;
@@ -39,26 +40,29 @@ public class DiaryController {
 
     /**
      * 添加或者编辑的页面转跳(添加用户和修改用户应该这么操作)
-     *  需要login权限
+     * 需要login权限
+     *
      * @param request
      * @param view
      * @return
      */
     @PrivilegeInfo(name = "login")
+    @LogInfo(message = "进入日记编写修改页面")
     @RequestMapping("addOrEdit")
     public String addOrEdit(HttpServletRequest request, Model view) {
 
         try {
             User user = (User) request.getSession().getAttribute("loginUser");
             String idStr = request.getParameter("id");
-            int id = Integer.parseInt(idStr);
-            Diary diary = diaryService.getDiary(id, user.getId());
-            if (diary != null) {
-                view.addAttribute("diary", diary);
-            } else {
-                return "common/404";
+            if (StringUtils.isNotBlank(idStr)) {
+                int id = Integer.parseInt(idStr);
+                Diary diary = diaryService.getDiary(id, user.getId());
+                if (diary != null) {
+                    view.addAttribute("diary", diary);
+                } else {
+                    return "common/404";
+                }
             }
-
         } catch (Exception e) {
             LoggerUtils.error(DiaryController.class, "addOrEdit 反正出错了", e);
         }
@@ -68,20 +72,20 @@ public class DiaryController {
 
     /**
      * 添加和编辑日记的接口
+     *
      * @param request
      * @param diary
      * @return
      */
     @PrivilegeInfo(name = "login")
+    @LogInfo(message = "添加或者修改日记")
     @RequestMapping(value = "addOrEditDiary", method = RequestMethod.POST)
     @ResponseBody
     public DefaultResult addOrEditDiary(HttpServletRequest request, Diary diary) {
         DefaultResult result = new DefaultResult();
         result.setCode(0);
         result.setMessage("失败");
-
         if (diary != null) {
-
             if (diary.getId() == null) {
                 Date date = new Date();
                 User user = (User) request.getSession().getAttribute("loginUser");
@@ -110,19 +114,21 @@ public class DiaryController {
 
     /**
      * 显示日记的页面转跳
-     *  需要login权限
+     * 需要login权限
+     *
      * @param request
      * @param view
      * @return
      */
     @PrivilegeInfo(name = "login")
+    @LogInfo(message = "查看日记")
     @RequestMapping("showDiary")
     public String showDiary(HttpServletRequest request, Model view) {
 
         try {
             String idStr = request.getParameter("id");
             int id = Integer.parseInt(idStr);
-            Diary diary = diaryService.getDiary(id,null);
+            Diary diary = diaryService.getDiary(id, null);
             if (diary != null) {
                 view.addAttribute("diary", diary);
             }
@@ -135,10 +141,12 @@ public class DiaryController {
 
     /**
      * 删除日记的接口
+     *
      * @param request
      * @return
      */
     @PrivilegeInfo(name = "login")
+    @LogInfo(message = "删除日记")
     @RequestMapping(value = "delete", method = RequestMethod.POST)
     @ResponseBody
     public DefaultResult delete(HttpServletRequest request) {
@@ -159,7 +167,7 @@ public class DiaryController {
                 }
             }
         } catch (Exception e) {
-            LoggerUtils.error(this.getClass(),"删除出错",e);
+            LoggerUtils.error(this.getClass(), "删除出错", e);
         }
 
         return result;
@@ -167,12 +175,14 @@ public class DiaryController {
 
     /**
      * 显示日记列表的转跳
-     *  需要login权限
+     * 需要login权限
+     *
      * @param request
      * @param view
      * @return
      */
     @PrivilegeInfo(name = "login")
+    @LogInfo(message = "进入查看日记列表")
     @RequestMapping(value = "listDiary")
     public String listDiary(HttpServletRequest request, Model view) {
 
@@ -212,10 +222,12 @@ public class DiaryController {
 
     /**
      * 查找日记的接口(为了良好的用户体验 有点蠢)
+     *
      * @param request
      * @return
      */
     @PrivilegeInfo(name = "login")
+    @LogInfo(message = "获取日记列表")
     @RequestMapping(value = "getDiaryList", method = RequestMethod.POST)
     @ResponseBody
     public DefaultResult getDiaryList(HttpServletRequest request) {

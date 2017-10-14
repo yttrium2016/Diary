@@ -81,7 +81,6 @@ public class CommonController {
         Object result = null;
 
         String city = request.getParameter("city");
-        System.out.println("city:"+city);
         city = java.net.URLEncoder.encode(city, "utf-8");
         //拼地址
         String apiUrl = String.format("http://www.sojson.com/open/api/weather/json.shtml?city=%s",city);
