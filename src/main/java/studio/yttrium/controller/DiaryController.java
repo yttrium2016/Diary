@@ -260,7 +260,7 @@ public class DiaryController {
                     List<Integer> privilegeList = privilegeService.findPrivilegeList(loginUser.getId());
 
                     if (privilegeList != null) {
-                        List<Diary> diaryList = diaryService.listDiaryByUserIds(privilegeList, title.trim());
+                        List<Diary> diaryList = diaryService.listDiaryByUserIds(privilegeList, title);
                         if (diaryList != null) {
                             result.setData(diaryList);
                             result.setMessage("查找成功");

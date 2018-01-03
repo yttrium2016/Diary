@@ -78,7 +78,7 @@ public class DiaryServiceImpl implements DiaryService {
         DiaryExample.Criteria criteria = example.createCriteria();
         criteria.andCreateByIn(privilegeList);
         if (StringUtils.isNotBlank(title)) {
-            criteria.andTitleLike("%" + title + "%");
+            criteria.andTitleLike("%" + title.trim() + "%");
         }
         example.setOrderByClause(" create_on DESC ");
         return diaryDao.selectByExampleLeftUser(example);
