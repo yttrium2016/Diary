@@ -53,12 +53,13 @@
 <div class="weui-flex">
     <div class="weui-flex__item">
         <div class="weui-btn-area">
-            <a class="weui-btn weui-btn_primary" href="/register.shml" id="btnRegister">注册</a>
+            <#--<a class="weui-btn weui-btn_primary" href="/register.shml" id="btnRegister">注册</a>-->
+            <a class="weui-btn weui-btn_primary" href="javascript:void(0);" id="btnRegister">注册</a>
         </div>
     </div>
     <div class="weui-flex__item">
         <div class="weui-btn-area">
-            <a class="weui-btn weui-btn_primary" href="javascript:" id="btnLogin">登录</a>
+            <a class="weui-btn weui-btn_primary" href="javascript:void(0);" id="btnLogin">登录</a>
         </div>
     </div>
 </div>
@@ -71,6 +72,18 @@
 <script>
     $(function () {
         FastClick.attach(document.body);
+
+        $.confirm({
+            title: '新功能推荐',
+            text: '新增朋友新日记 微信推送功能<br>有朋友新写日记可以推送到微信<br> 是否需要去订阅?',
+            onOK: function () {
+                //点击确认
+                window.location.href = "wx.shml";
+            },
+            onCancel: function () {
+            }
+        });
+
     });
 </script>
 <script src="/js/jquery-weui.js"></script>
@@ -100,6 +113,16 @@
         else if (!loginPassword) $.toptip('密码不能为空...', 'warning');
 //        else $.toptip('提交成功', 'success');
         else doLogin(loginName, loginPassword);
+    });
+
+    $("#btnRegister").click(function () {
+        $.alert({
+            title: '暂不开放注册功能',
+            text: '如需注册请联系管理员<br>549444957@qq.com',
+            onOK: function () {
+                //点击确认
+            }
+        });
     });
 
     function doLogin(loginName, loginPassword) {

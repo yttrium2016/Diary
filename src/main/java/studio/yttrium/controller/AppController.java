@@ -81,8 +81,6 @@ public class AppController extends BaseApiController {
                 diary.setCreateBy(request.getIntHeader("userId"));
                 diary.setCreateOn(date);
                 diary.setModifyOn(date);
-                System.out.println(diary.toString());
-
             } else {
                 Date date = new Date();
                 diary.setModifyOn(date);

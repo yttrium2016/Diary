@@ -14,6 +14,7 @@ import studio.yttrium.service.DiaryService;
 import studio.yttrium.service.PrivilegeService;
 import studio.yttrium.utils.LoggerUtils;
 import studio.yttrium.utils.StringUtils;
+import studio.yttrium.utils.WeiXinSendUtils;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -93,8 +94,8 @@ public class DiaryController {
                     diary.setCreateBy(user.getId());
                 diary.setCreateOn(date);
                 diary.setModifyOn(date);
-                System.out.println(diary.toString());
-
+                if (user != null)
+                    WeiXinSendUtils.sendMessage(user.getUserName() + "新写了一篇日记");
             } else {
                 Date date = new Date();
                 diary.setModifyOn(date);
